@@ -9,15 +9,17 @@ const display = document.querySelector(".display");
 const buttons = document.querySelectorAll(".btn");
 const clearBtn = document.querySelector(".clear-btn")
 
-const add = (a, b) => { a + b };
+const add = (a, b) => a + b;
 
-const subtract = (a, b) => { a - b };
+const subtract = (a, b) => a - b ;
 
-const multiply = (a, b) => { a + b };
+const multiply = (a, b) => a * b;
 
-const divide = (a, b) => { b !== 0 ? a / b : display.textContent = "Cannot divide by zero." }
+const divide = (a, b) => b !== 0 ? a / b : display.textContent = "Cannot divide by zero.";
 
-const operate = (operation, firstNumber, secondNumber) => { operation(firstNumber, secondNumber)};
+const operate = (operation, firstNumber, secondNumber) => { 
+  return operation(firstNumber, secondNumber);
+};
 
 const clear = () => { display.textContent = "" };
 
@@ -25,15 +27,29 @@ const getOperator = (op) => {
   switch (op) {
     case '+':
       operator = add;
+      firstNumber = displayValue;
+      clear();
       break;      
     case '-':
       operator = subtract;
+      firstNumber = displayValue;
+      clear()
       break;
     case '*':
       operator = multiply;
+      firstNumber = displayValue;
+      clear();
       break;
     case '/':
       operator = divide;
+      firstNumber = displayValue;
+      clear();
+      break;
+    case '=':
+      secondNumber = displayValue;
+      clear();
+      displayValue = operate(operator, firstNumber, secondNumber);
+      display.textContent = displayValue;
       break;
     case 'C':
       clear();
@@ -49,9 +65,11 @@ buttons.forEach( (btn) => {
     if (!nonDigits.includes(buttonValue)) {
       display.textContent += buttonValue;
       displayValue = Number(display.textContent);
-    } else{
+    } else {
       getOperator(buttonValue);
-      clear();
+      if (buttonValue !== '=' && buttonValue !== 'C') {
+        clear();
+      }
     }
   });
 });
